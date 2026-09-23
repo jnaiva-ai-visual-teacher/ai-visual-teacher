@@ -1,0 +1,915 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Dashboard — JNAIVA</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        /* =========================================
+           JNAIVA DASHBOARD
+        ========================================= */
+
+        .dashboard-page {
+            min-height: calc(100vh - 80px);
+            padding: 55px 6% 90px;
+        }
+
+        .dashboard-container {
+            max-width: 1180px;
+            margin: auto;
+        }
+
+        /* HEADER */
+
+        .dashboard-heading {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            gap: 30px;
+            margin-bottom: 38px;
+        }
+
+        .dashboard-heading small {
+            display: block;
+            margin-bottom: 10px;
+            color: #85847d;
+            font-size: 12px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: .1em;
+        }
+
+        .dashboard-heading h1 {
+            margin: 0;
+            font-size: clamp(38px, 5vw, 60px);
+            line-height: 1;
+            letter-spacing: -.055em;
+        }
+
+        .dashboard-heading h1 em {
+            font-family: "Playfair Display", serif;
+            font-weight: 500;
+        }
+
+        .dashboard-date {
+            padding: 11px 15px;
+            border: 1px solid #deddd6;
+            border-radius: 12px;
+            background: rgba(255,255,255,.55);
+            font-size: 12px;
+            color: #77766f;
+            white-space: nowrap;
+        }
+
+        /* GRID */
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 1.5fr .8fr;
+            gap: 20px;
+        }
+
+        .dashboard-card {
+            background: rgba(255,255,255,.7);
+            border: 1px solid #dfded8;
+            border-radius: 24px;
+            box-shadow: 0 14px 45px rgba(0,0,0,.045);
+        }
+
+        /* PROGRESS */
+
+        .progress-card {
+            padding: 30px;
+            min-height: 290px;
+        }
+
+        .card-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .card-label {
+            font-size: 11px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: .1em;
+            color: #85847d;
+        }
+
+        .card-link {
+            color: #222;
+            text-decoration: none;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .learning-progress {
+            display: flex;
+            align-items: center;
+            gap: 28px;
+        }
+
+        .progress-circle {
+            width: 135px;
+            height: 135px;
+            flex-shrink: 0;
+            border-radius: 50%;
+            background:
+                conic-gradient(
+                    #111 0deg 248deg,
+                    #e8e6de 248deg 360deg
+                );
+            display: grid;
+            place-items: center;
+            position: relative;
+        }
+
+        .progress-circle::before {
+            content: "";
+            position: absolute;
+            width: 104px;
+            height: 104px;
+            border-radius: 50%;
+            background: #faf9f4;
+        }
+
+        .progress-value {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+        }
+
+        .progress-value strong {
+            display: block;
+            font-size: 29px;
+            letter-spacing: -.05em;
+        }
+
+        .progress-value span {
+            font-size: 10px;
+            color: #85847d;
+        }
+
+        .progress-copy h2 {
+            margin: 0 0 8px;
+            font-size: 22px;
+            letter-spacing: -.035em;
+        }
+
+        .progress-copy p {
+            margin: 0;
+            max-width: 380px;
+            color: #77766f;
+            font-size: 13px;
+            line-height: 1.7;
+        }
+
+        .progress-line {
+            height: 6px;
+            margin-top: 20px;
+            background: #e7e5dd;
+            border-radius: 20px;
+            overflow: hidden;
+        }
+
+        .progress-line span {
+            display: block;
+            width: 69%;
+            height: 100%;
+            background: #111;
+            border-radius: inherit;
+        }
+
+        /* STREAK */
+
+        .streak-card {
+            padding: 30px;
+            min-height: 290px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .streak-number {
+            font-size: 65px;
+            line-height: 1;
+            letter-spacing: -.07em;
+            margin: 25px 0 5px;
+        }
+
+        .streak-number span {
+            font-size: 20px;
+            letter-spacing: 0;
+            color: #85847d;
+        }
+
+        .streak-text {
+            color: #77766f;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .streak-days {
+            display: flex;
+            gap: 7px;
+            margin-top: auto;
+        }
+
+        .day {
+            flex: 1;
+            height: 35px;
+            border-radius: 8px;
+            background: #e8e6de;
+            display: grid;
+            place-items: center;
+            font-size: 9px;
+            color: #88877f;
+        }
+
+        .day.done {
+            background: #111;
+            color: white;
+        }
+
+        /* SECTION */
+
+        .dashboard-section {
+            margin-top: 20px;
+        }
+
+        .section-heading {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 13px;
+        }
+
+        .section-heading h2 {
+            margin: 0;
+            font-size: 19px;
+            letter-spacing: -.035em;
+        }
+
+        .section-heading a {
+            color: #77766f;
+            font-size: 11px;
+            text-decoration: none;
+        }
+
+        /* CONTINUE */
+
+        .continue-card {
+            padding: 25px;
+            display: flex;
+            align-items: center;
+            gap: 22px;
+        }
+
+        .continue-icon {
+            width: 65px;
+            height: 65px;
+            flex-shrink: 0;
+            border-radius: 18px;
+            display: grid;
+            place-items: center;
+            background: #e9e5fa;
+            font-size: 25px;
+        }
+
+        .continue-content {
+            flex: 1;
+        }
+
+        .continue-content small {
+            color: #89877f;
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: .08em;
+            font-weight: 800;
+        }
+
+        .continue-content h3 {
+            margin: 5px 0;
+            font-size: 17px;
+        }
+
+        .continue-content p {
+            margin: 0;
+            color: #7c7b74;
+            font-size: 12px;
+        }
+
+        .continue-button {
+            padding: 11px 17px;
+            border-radius: 10px;
+            background: #111;
+            color: white;
+            text-decoration: none;
+            font-size: 11px;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        /* SUBJECTS */
+
+        .subjects-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+        }
+
+        .subject-card {
+            padding: 21px;
+            min-height: 145px;
+            border: 1px solid #dfded8;
+            border-radius: 18px;
+            background: rgba(255,255,255,.55);
+            transition: .25s ease;
+            cursor: pointer;
+        }
+
+        .subject-card:hover {
+            transform: translateY(-3px);
+            border-color: #aaa89f;
+            box-shadow: 0 12px 30px rgba(0,0,0,.06);
+        }
+
+        .subject-icon {
+            width: 38px;
+            height: 38px;
+            display: grid;
+            place-items: center;
+            border-radius: 11px;
+            margin-bottom: 16px;
+            font-size: 16px;
+        }
+
+        .subject-card:nth-child(1) .subject-icon {
+            background: #e8e3fa;
+        }
+
+        .subject-card:nth-child(2) .subject-icon {
+            background: #e0f1ef;
+        }
+
+        .subject-card:nth-child(3) .subject-icon {
+            background: #f4e8c9;
+        }
+
+        .subject-card:nth-child(4) .subject-icon {
+            background: #eee2d8;
+        }
+
+        .subject-card h3 {
+            margin: 0 0 5px;
+            font-size: 14px;
+        }
+
+        .subject-card p {
+            margin: 0;
+            color: #85847d;
+            font-size: 10px;
+        }
+
+        /* ACTIVITY */
+
+        .activity-card {
+            padding: 8px 23px;
+        }
+
+        .activity-row {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 17px 0;
+            border-bottom: 1px solid #e8e6df;
+        }
+
+        .activity-row:last-child {
+            border-bottom: none;
+        }
+
+        .activity-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            background: #f0efe9;
+            display: grid;
+            place-items: center;
+            font-size: 14px;
+        }
+
+        .activity-info {
+            flex: 1;
+        }
+
+        .activity-info strong {
+            display: block;
+            font-size: 12px;
+        }
+
+        .activity-info span {
+            color: #89877f;
+            font-size: 10px;
+        }
+
+        .activity-score {
+            font-size: 11px;
+            font-weight: 800;
+        }
+
+        /* RECOMMENDATIONS */
+
+        .recommendations {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+        }
+
+        .recommend-card {
+            padding: 22px;
+            min-height: 160px;
+            border: 1px solid #dfded8;
+            border-radius: 18px;
+            background: #fffef9;
+        }
+
+        .recommend-tag {
+            display: inline-block;
+            padding: 5px 8px;
+            border-radius: 999px;
+            background: #f0efe9;
+            color: #77766f;
+            font-size: 9px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: .05em;
+        }
+
+        .recommend-card h3 {
+            margin: 17px 0 7px;
+            font-size: 15px;
+            letter-spacing: -.02em;
+        }
+
+        .recommend-card p {
+            margin: 0;
+            color: #818078;
+            font-size: 11px;
+            line-height: 1.6;
+        }
+
+        .recommend-link {
+            display: inline-block;
+            margin-top: 15px;
+            color: #111;
+            font-size: 10px;
+            font-weight: 800;
+            text-decoration: none;
+        }
+
+        /* RESPONSIVE */
+
+        @media (max-width: 900px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .subjects-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .recommendations {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .dashboard-page {
+                padding: 40px 5% 70px;
+            }
+
+            .dashboard-heading {
+                display: block;
+            }
+
+            .dashboard-date {
+                display: inline-block;
+                margin-top: 18px;
+            }
+
+            .learning-progress {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .continue-card {
+                align-items: flex-start;
+                flex-wrap: wrap;
+            }
+
+            .continue-button {
+                margin-left: 87px;
+            }
+
+            .subjects-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- HEADER -->
+<header class="site-header">
+
+    <a href="index.html" class="logo">
+        JNAIVA<span>.</span>
+    </a>
+
+    <nav class="main-nav">
+        <a href="index.html">Home</a>
+        <a href="learn.html">Learn</a>
+        <a href="visualize.html">Visualize</a>
+        <a href="quiz.html">Quiz</a>
+        <a href="voice.html">Voice</a>
+        <a href="dashboard.html" class="active">Dashboard</a>
+    </nav>
+
+    <button class="menu-toggle" aria-label="Open menu">
+        ☰
+    </button>
+
+</header>
+
+
+<main class="dashboard-page">
+
+    <div class="dashboard-container">
+
+        <!-- DASHBOARD HEADING -->
+
+        <section class="dashboard-heading">
+
+            <div>
+
+                <small>Your learning space</small>
+
+                <h1>
+                    Welcome back,
+                    <em>learner.</em>
+                </h1>
+
+            </div>
+
+            <div class="dashboard-date" id="dashboardDate">
+                Today
+            </div>
+
+        </section>
+
+
+        <!-- TOP CARDS -->
+
+        <section class="dashboard-grid">
+
+            <!-- OVERALL PROGRESS -->
+
+            <div class="dashboard-card progress-card">
+
+                <div class="card-top">
+
+                    <span class="card-label">
+                        Overall progress
+                    </span>
+
+                    <a href="learn.html" class="card-link">
+                        Keep learning →
+                    </a>
+
+                </div>
+
+
+                <div class="learning-progress">
+
+                    <div class="progress-circle">
+
+                        <div class="progress-value">
+
+                            <strong>69%</strong>
+
+                            <span>completed</span>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="progress-copy">
+
+                        <h2>
+                            You're building momentum.
+                        </h2>
+
+                        <p>
+                            You've completed 69% of your current
+                            learning path. Continue where you left
+                            off or explore something new.
+                        </p>
+
+                        <div class="progress-line">
+                            <span></span>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- STREAK -->
+
+            <div class="dashboard-card streak-card">
+
+                <div class="card-label">
+                    Learning streak
+                </div>
+
+                <div class="streak-number">
+                    07 <span>days</span>
+                </div>
+
+                <div class="streak-text">
+                    Seven days of consistent learning.
+                    Keep the rhythm going.
+                </div>
+
+
+                <div class="streak-days">
+
+                    <div class="day done">M</div>
+                    <div class="day done">T</div>
+                    <div class="day done">W</div>
+                    <div class="day done">T</div>
+                    <div class="day done">F</div>
+                    <div class="day done">S</div>
+                    <div class="day done">S</div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- CONTINUE LEARNING -->
+
+        <section class="dashboard-section">
+
+            <div class="section-heading">
+
+                <h2>
+                    Continue learning
+                </h2>
+
+                <a href="learn.html">
+                    View all
+                </a>
+
+            </div>
+
+
+            <div class="dashboard-card continue-card">
+
+                <div class="continue-icon">
+                    ◉
+                </div>
+
+                <div class="continue-content">
+
+                    <small>
+                        Biology · Chapter 04
+                    </small>
+
+                    <h3>
+                        Understanding Photosynthesis
+                    </h3>
+
+                    <p>
+                        12 minutes remaining · 68% complete
+                    </p>
+
+                </div>
+
+                <a
+                    href="learn.html"
+                    class="continue-button"
+                >
+                    Continue
+                </a>
+
+            </div>
+
+        </section>
+
+
+        <!-- SUBJECTS -->
+
+        <section class="dashboard-section">
+
+            <div class="section-heading">
+
+                <h2>
+                    Your subjects
+                </h2>
+
+                <a href="learn.html">
+                    Explore subjects
+                </a>
+
+            </div>
+
+
+            <div class="subjects-grid">
+
+                <div class="subject-card">
+
+                    <div class="subject-icon">
+                        ◌
+                    </div>
+
+                    <h3>
+                        Biology
+                    </h3>
+
+                    <p>
+                        12 lessons · 69% complete
+                    </p>
+
+                </div>
+
+
+                <div class="subject-card">
+
+                    <div class="subject-icon">
+                        △
+                    </div>
+
+                    <h3>
+                        Physics
+                    </h3>
+
+                    <p>
+                        8 lessons · 42% complete
+                    </p>
+
+                </div>
+
+
+                <div class="subject-card">
+
+                    <div class="subject-icon">
+                        ◇
+                    </div>
+
+                    <h3>
+                        Chemistry
+                    </h3>
+
+                    <p>
+                        10 lessons · 56% complete
+                    </p>
+
+                </div>
+
+
+                <div class="subject-card">
+
+                    <div class="subject-icon">
+                        &lt;/&gt;
+                    </div>
+
+                    <h3>
+                        Python
+                    </h3>
+
+                    <p>
+                        6 lessons · 31% complete
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- RECENT ACTIVITY -->
+
+        <section class="dashboard-section">
+
+            <div class="section-heading">
+
+                <h2>
+                    Recent activity
+                </h2>
+
+                <a href="#">
+                    View history
+                </a>
+
+            </div>
+
+
+            <div class="dashboard-card activity-card">
+
+                <div class="activity-row">
+
+                    <div class="activity-icon">
+                        ✓
+                    </div>
+
+                    <div class="activity-info">
+
+                        <strong>
+                            Completed Photosynthesis lesson
+                        </strong>
+
+                        <span>
+                            Biology · Today
+                        </span>
+
+                    </div>
+
+                    <div class="activity-score">
+                        +20 XP
+                    </div>
+
+                </div>
+
+
+                <div class="activity-row">
+
+                    <div class="activity-icon">
+                        ?
+                    </div>
+
+                    <div class="activity-info">
+
+                        <strong>
+                            Finished Biology quiz
+                        </strong>
+
+                        <span>
+                            8 / 10 correct · Yesterday
+                        </span>
+
+                    </div>
+
+                    <div class="activity-score">
+                        +30 XP
+                    </div>
+
+                </div>
+
+
+                <div class="activity-row">
+
+                    <div class="activity-icon">
+                        ◉
+                    </div>
+
+                    <div class="activity-info">
+
+                        <strong>
+                            Explored a visual simulation
+                        </strong>
+
+                        <span>
+                            Biology · Yesterday
+                        </span>    
+
+                    </div>                    
+
+                </div>
+
+            </div>
+
+        </section>        
+
+
+    </main>                                                    
+
+
+    <footer class="site-footer">
+
+        <p>
+            Made with ❤️ by
+            <a href="

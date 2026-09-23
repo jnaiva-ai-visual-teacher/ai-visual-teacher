@@ -1,0 +1,1260 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Quiz — JNAIVA</title>
+
+    <link
+        rel="stylesheet"
+        href="style.css"
+    >
+
+    <style>
+
+        /* =====================================================
+           QUIZ PAGE
+        ===================================================== */
+
+        .quiz-page {
+
+            max-width: 1240px;
+
+            margin: auto;
+
+            padding: 70px 40px 120px;
+
+        }
+
+
+        /* =====================================================
+           INTRO
+        ===================================================== */
+
+        .quiz-intro {
+
+            max-width: 760px;
+
+            margin-bottom: 55px;
+
+        }
+
+        .quiz-intro h1 {
+
+            font-size:
+                clamp(48px, 6vw, 76px);
+
+            line-height: .98;
+
+            letter-spacing: -4px;
+
+            font-weight: 500;
+
+            margin-bottom: 22px;
+
+        }
+
+        .quiz-intro h1 em {
+
+            font-family:
+                "Playfair Display",
+                Georgia,
+                serif;
+
+            font-weight: 500;
+
+        }
+
+        .quiz-intro p:not(.eyebrow) {
+
+            color: #6d6a63;
+
+            font-size: 16px;
+
+            line-height: 1.7;
+
+            max-width: 620px;
+
+        }
+
+
+        /* =====================================================
+           QUIZ AREA
+        ===================================================== */
+
+        .quiz-layout {
+
+            display: grid;
+
+            grid-template-columns:
+                220px 1fr;
+
+            gap: 20px;
+
+            align-items: start;
+
+        }
+
+
+        /* =====================================================
+           QUIZ SIDEBAR
+        ===================================================== */
+
+        .quiz-sidebar {
+
+            background: #eeece4;
+
+            border-radius: 22px;
+
+            padding: 13px;
+
+            position: sticky;
+
+            top: 105px;
+
+        }
+
+        .quiz-sidebar-title {
+
+            padding: 10px;
+
+            font-size: 10px;
+
+            text-transform: uppercase;
+
+            letter-spacing: 1.4px;
+
+            color: #77736d;
+
+        }
+
+        .quiz-topic {
+
+            width: 100%;
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 10px;
+
+            border: none;
+
+            background: transparent;
+
+            padding: 11px;
+
+            border-radius: 9px;
+
+            text-align: left;
+
+            color: #666;
+
+            font-size: 12px;
+
+            cursor: pointer;
+
+            transition: .2s;
+
+        }
+
+        .quiz-topic:hover {
+
+            background: #dedbd2;
+
+            color: #111;
+
+        }
+
+        .quiz-topic.active {
+
+            background: #171717;
+
+            color: white;
+
+        }
+
+
+        /* =====================================================
+           QUIZ CARD
+        ===================================================== */
+
+        .quiz-card {
+
+            background: white;
+
+            border: 1px solid #deddd6;
+
+            border-radius: 26px;
+
+            padding: 35px;
+
+            min-height: 560px;
+
+        }
+
+
+        /* HEADER */
+
+        .quiz-header {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            gap: 20px;
+
+            margin-bottom: 22px;
+
+        }
+
+        .quiz-number {
+
+            color: #77736d;
+
+            font-size: 12px;
+
+        }
+
+        .quiz-score {
+
+            background: #171717;
+
+            color: white;
+
+            padding: 7px 12px;
+
+            border-radius: 20px;
+
+            font-size: 11px;
+
+        }
+
+
+        /* PROGRESS */
+
+        .progress-wrapper {
+
+            width: 100%;
+
+            height: 5px;
+
+            background: #e5e3dc;
+
+            border-radius: 10px;
+
+            margin-bottom: 42px;
+
+            overflow: hidden;
+
+        }
+
+        .progress-bar {
+
+            width: 20%;
+
+            height: 100%;
+
+            background: #171717;
+
+            border-radius: 10px;
+
+            transition: width .3s ease;
+
+        }
+
+
+        /* QUESTION */
+
+        .question-label {
+
+            font-size: 10px;
+
+            color: #77736d;
+
+            text-transform: uppercase;
+
+            letter-spacing: 1.3px;
+
+            margin-bottom: 12px;
+
+        }
+
+        .question {
+
+            font-size: 30px;
+
+            line-height: 1.2;
+
+            letter-spacing: -.9px;
+
+            font-weight: 500;
+
+            max-width: 800px;
+
+            margin-bottom: 32px;
+
+        }
+
+
+        /* ANSWERS */
+
+        .answers {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(2, 1fr);
+
+            gap: 10px;
+
+        }
+
+        .answer {
+
+            min-height: 65px;
+
+            border: 1px solid #d8d6ce;
+
+            border-radius: 14px;
+
+            background: #faf9f5;
+
+            padding: 14px 16px;
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 13px;
+
+            text-align: left;
+
+            cursor: pointer;
+
+            color: #292929;
+
+            font-size: 13px;
+
+            transition:
+                border .2s,
+                background .2s,
+                transform .2s;
+
+        }
+
+        .answer:hover {
+
+            border-color: #888;
+
+            background: white;
+
+            transform: translateY(-2px);
+
+        }
+
+        .answer-letter {
+
+            width: 29px;
+
+            height: 29px;
+
+            min-width: 29px;
+
+            border-radius: 50%;
+
+            background: #e8e6df;
+
+            display: grid;
+
+            place-items: center;
+
+            font-size: 11px;
+
+            font-weight: 600;
+
+        }
+
+
+        /* CORRECT */
+
+        .answer.correct {
+
+            border-color: #4b7250;
+
+            background: #e4f0e4;
+
+        }
+
+        .answer.correct .answer-letter {
+
+            background: #4b7250;
+
+            color: white;
+
+        }
+
+
+        /* WRONG */
+
+        .answer.wrong {
+
+            border-color: #9a5650;
+
+            background: #f4e4e2;
+
+        }
+
+        .answer.wrong .answer-letter {
+
+            background: #9a5650;
+
+            color: white;
+
+        }
+
+
+        /* FEEDBACK */
+
+        .feedback {
+
+            display: none;
+
+            margin-top: 22px;
+
+            padding: 17px;
+
+            border-radius: 13px;
+
+            background: #eeece4;
+
+            color: #555;
+
+            font-size: 13px;
+
+            line-height: 1.6;
+
+        }
+
+        .feedback.show {
+
+            display: block;
+
+        }
+
+
+        /* FOOTER */
+
+        .quiz-footer {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            gap: 15px;
+
+            margin-top: 28px;
+
+        }
+
+        .quiz-hint {
+
+            color: #999;
+
+            font-size: 11px;
+
+        }
+
+        .next-button {
+
+            border: none;
+
+            background: #171717;
+
+            color: white;
+
+            padding: 13px 22px;
+
+            border-radius: 25px;
+
+            cursor: pointer;
+
+            font-size: 13px;
+
+            opacity: .4;
+
+            pointer-events: none;
+
+            transition: .2s;
+
+        }
+
+        .next-button.ready {
+
+            opacity: 1;
+
+            pointer-events: auto;
+
+        }
+
+        .next-button:hover {
+
+            background: #000;
+
+            transform: translateY(-2px);
+
+        }
+
+
+        /* =====================================================
+           RESULT
+        ===================================================== */
+
+        .quiz-result {
+
+            display: none;
+
+            text-align: center;
+
+            padding: 60px 20px;
+
+        }
+
+        .quiz-result.show {
+
+            display: block;
+
+        }
+
+        .result-circle {
+
+            width: 110px;
+
+            height: 110px;
+
+            border-radius: 50%;
+
+            background: #c3ecee;
+
+            display: grid;
+
+            place-items: center;
+
+            margin: 0 auto 25px;
+
+            font-family:
+                "Playfair Display",
+                Georgia,
+                serif;
+
+            font-size: 32px;
+
+        }
+
+        .quiz-result h2 {
+
+            font-size: 38px;
+
+            letter-spacing: -1.5px;
+
+            margin-bottom: 10px;
+
+        }
+
+        .quiz-result p {
+
+            color: #77736d;
+
+            margin-bottom: 28px;
+
+        }
+
+
+        /* =====================================================
+           QUIZ FEATURES
+        ===================================================== */
+
+        .quiz-features {
+
+            margin-top: 25px;
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(3, 1fr);
+
+            gap: 12px;
+
+        }
+
+        .quiz-feature {
+
+            background: #eeece4;
+
+            border-radius: 17px;
+
+            padding: 22px;
+
+        }
+
+        .quiz-feature strong {
+
+            display: block;
+
+            font-size: 14px;
+
+            margin-bottom: 5px;
+
+        }
+
+        .quiz-feature span {
+
+            color: #77736d;
+
+            font-size: 11px;
+
+        }
+
+
+        /* =====================================================
+           MOBILE
+        ===================================================== */
+
+        @media (max-width: 850px) {
+
+            .quiz-page {
+
+                padding:
+                    60px 20px 90px;
+
+            }
+
+            .quiz-layout {
+
+                grid-template-columns: 1fr;
+
+            }
+
+            .quiz-sidebar {
+
+                position: static;
+
+                display: flex;
+
+                overflow-x: auto;
+
+                gap: 5px;
+
+                padding: 8px;
+
+            }
+
+            .quiz-sidebar-title {
+
+                display: none;
+
+            }
+
+            .quiz-topic {
+
+                width: auto;
+
+                white-space: nowrap;
+
+            }
+
+            .answers {
+
+                grid-template-columns: 1fr;
+
+            }
+
+            .quiz-features {
+
+                grid-template-columns: 1fr;
+
+            }
+
+        }
+
+
+        @media (max-width: 500px) {
+
+            .quiz-intro h1 {
+
+                font-size: 52px;
+
+                letter-spacing: -3px;
+
+            }
+
+            .quiz-card {
+
+                padding: 22px;
+
+            }
+
+            .question {
+
+                font-size: 25px;
+
+            }
+
+            .quiz-footer {
+
+                flex-direction: column;
+
+                align-items: stretch;
+
+            }
+
+            .next-button {
+
+                width: 100%;
+
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- =====================================================
+     HEADER
+===================================================== -->
+
+<header class="site-header">
+
+    <a
+        href="index.html"
+        class="brand"
+    >
+        JNAIVA
+    </a>
+
+
+    <nav class="main-nav">
+
+        <a
+            href="index.html"
+            class="nav-link"
+        >
+            Home
+        </a>
+
+        <a
+            href="learn.html"
+            class="nav-link"
+        >
+            Learn
+        </a>
+
+        <a
+            href="visualize.html"
+            class="nav-link"
+        >
+            Visualize
+        </a>
+
+        <a
+            href="quiz.html"
+            class="nav-link active"
+        >
+            Quiz
+        </a>
+
+        <a
+            href="voice.html"
+            class="nav-link"
+        >
+            Voice
+        </a>
+
+        <a
+            href="dashboard.html"
+            class="nav-link"
+        >
+            About
+        </a>
+
+    </nav>
+
+
+    <div class="header-actions">
+
+        <a
+            href="learn.html"
+            class="header-button"
+        >
+            Learn First
+            <span>→</span>
+        </a>
+
+        <button
+            class="menu-button"
+            id="menuButton"
+        >
+            ☰
+        </button>
+
+    </div>
+
+</header>
+
+
+<!-- MOBILE MENU -->
+
+<div
+    class="mobile-menu"
+    id="mobileMenu"
+>
+
+    <a href="index.html">Home</a>
+
+    <a href="learn.html">Learn</a>
+
+    <a href="visualize.html">Visualize</a>
+
+    <a href="quiz.html">Quiz</a>
+
+    <a href="voice.html">Voice</a>
+
+    <a href="dashboard.html">About</a>
+
+</div>
+
+
+
+<!-- =====================================================
+     MAIN
+===================================================== -->
+
+<main class="quiz-page">
+
+
+    <!-- INTRO -->
+
+    <section class="quiz-intro">
+
+        <p class="eyebrow">
+            JNAIVA PRACTICE
+        </p>
+
+        <h1>
+
+            Learn it.
+            <br>
+
+            <em>Then prove it.</em>
+
+        </h1>
+
+        <p>
+
+            Test your understanding with short,
+            interactive quizzes created to help
+            you remember what you learn.
+
+        </p>
+
+    </section>
+
+
+
+    <!-- QUIZ LAYOUT -->
+
+    <section class="quiz-layout">
+
+
+        <!-- SIDEBAR -->
+
+        <aside class="quiz-sidebar">
+
+            <div class="quiz-sidebar-title">
+                Quiz Topics
+            </div>
+
+
+            <button
+                class="quiz-topic active"
+            >
+                Biology
+            </button>
+
+            <button class="quiz-topic">
+                Physics
+            </button>
+
+            <button class="quiz-topic">
+                Chemistry
+            </button>
+
+            <button class="quiz-topic">
+                Mathematics
+            </button>
+
+            <button class="quiz-topic">
+                Python
+            </button>
+
+            <button class="quiz-topic">
+                Electronics
+            </button>
+
+        </aside>
+
+
+
+        <!-- QUIZ -->
+
+        <div>
+
+            <div
+                class="quiz-card"
+                id="quizCard"
+            >
+
+                <!-- HEADER -->
+
+                <div class="quiz-header">
+
+                    <span
+                        class="quiz-number"
+                        id="questionNumber"
+                    >
+                        Question 1 of 5
+                    </span>
+
+                    <span
+                        class="quiz-score"
+                        id="scoreDisplay"
+                    >
+                        Score: 0
+                    </span>
+
+                </div>
+
+
+                <!-- PROGRESS -->
+
+                <div class="progress-wrapper">
+
+                    <div
+                        class="progress-bar"
+                        id="progressBar"
+                    ></div>
+
+                </div>
+
+
+                <!-- QUESTION AREA -->
+
+                <div id="questionArea">
+
+                    <div class="question-label">
+                        Biology · Photosynthesis
+                    </div>
+
+
+                    <h2
+                        class="question"
+                        id="question"
+                    >
+                        What is the primary source
+                        of energy for photosynthesis?
+                    </h2>
+
+
+                    <div
+                        class="answers"
+                        id="answers"
+                    >
+
+                        <!-- JS INSERTS ANSWERS -->
+
+                    </div>
+
+
+                    <div
+                        class="feedback"
+                        id="feedback"
+                    >
+                    </div>
+
+                </div>
+
+
+                <!-- FOOTER -->
+
+                <div class="quiz-footer">
+
+                    <span class="quiz-hint">
+                        Select one answer to continue.
+                    </span>
+
+                    <button
+                        class="next-button"
+                        id="nextButton"
+                    >
+                        Next →
+                    </button>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- RESULT -->
+
+            <div
+                class="quiz-card quiz-result"
+                id="quizResult"
+            >
+
+                <div class="result-circle">
+
+                    <span id="finalScore">
+                        0/5
+                    </span>
+
+                </div>
+
+
+                <h2>
+                    Quiz complete.
+                </h2>
+
+
+                <p id="resultMessage">
+                    Nice work. Keep learning and
+                    try another topic.
+                </p>
+
+
+                <button
+                    class="primary-button"
+                    id="restartButton"
+                >
+                    Try Again →
+                </button>
+
+            </div>
+
+
+
+            <!-- FEATURES -->
+
+            <div class="quiz-features">
+
+                <div class="quiz-feature">
+
+                    <strong>
+                        Instant feedback
+                    </strong>
+
+                    <span>
+                        Understand why an answer
+                        is correct.
+                    </span>
+
+                </div>
+
+
+                <div class="quiz-feature">
+
+                    <strong>
+                        Track progress
+                    </strong>
+
+                    <span>
+                        See your score as you learn.
+                    </span>
+
+                </div>
+
+
+                <div class="quiz-feature">
+
+                    <strong>
+                        Learn from mistakes
+                    </strong>
+
+                    <span>
+                        Review concepts you missed.
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+</main>
+
+
+
+<!-- =====================================================
+     FOOTER
+===================================================== -->
+
+<footer class="site-footer">
+
+    <div class="footer-brand">
+
+        <strong>
+            JNAIVA
+        </strong>
+
+        <span>
+            Learn · Visualize · Explore · Grow
+        </span>
+
+    </div>
+
+
+    <div class="footer-links">
+
+        <a href="index.html">
+            Home
+        </a>
+
+        <a href="learn.html">
+            Learn
+        </a>
+
+        <a href="visualize.html">
+            Visualize
+        </a>
+
+        <a href="voice.html">
+            Voice
+        </a>
+
+    </div>
+
+</footer>
+
+
+
+<!-- =====================================================
+     JAVASCRIPT
+===================================================== -->
+
+<script src="script.js"></script>
+
+
+<script>
+
+/* =========================================================
+   JNAIVA QUIZ ENGINE
+========================================================= */
+
+const questions = [
+
+    {
+        question:
+            "What is the primary source of energy for photosynthesis?",
+
+        answers: [
+            "Moonlight",
+            "Sunlight",
+            "Soil",
+            "Oxygen"
+        ],
+
+        correct: 1,
+
+        explanation:
+            "Plants use sunlight as the main energy source for photosynthesis."
+    },
+
+
+    {
+        question:
+            "Which pigment absorbs light energy in plants?",
+
+        answers: [
+            "Hemoglobin",
+            "Melanin",
+            "Chlorophyll",
+            "Keratin"
+        ],
+
+        correct: 2,
+
+        explanation:
+            "Chlorophyll is the green pigment that absorbs light energy."
+    },
+
+
+    {
+        question:
+            "Which gas do plants take in during photosynthesis?",
+
+        answers: [
+            "Oxygen",
+            "Nitrogen",
+            "Carbon dioxide",
+            "Hydrogen"
+        ],
+
+        correct: 2,
+
+        explanation:
+            "Plants take carbon dioxide from the atmosphere and use it during photosynthesis."
+    },
+
+
+    {
+        question:
+            "What food molecule is produced by photosynthesis?",
+
+        answers: [
+            "Glucose",
+            "Protein",
+            "Fat",
+            "Vitamin"
+        ],
+
+        correct: 0,
+
+        explanation:
+            "Photosynthesis produces glucose, which is the primary food molecule."
+    },    
+
+    {
+        question:
+            "Which organelle in plant cells is responsible for photosynthesis?",
+
+        answers: [
+            "Mitochondria",
+            "Nucleus",
+            "Chloroplast",
+            "Ribosome"
+        ],
+
+        correct: 2,
+
+        explanation:
+            "Chloroplasts are the organelles where photosynthesis takes place."
+    }   
+    }

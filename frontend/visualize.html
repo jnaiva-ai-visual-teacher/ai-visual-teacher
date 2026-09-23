@@ -1,0 +1,1294 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Visualize — JNAIVA</title>
+
+    <link
+        rel="stylesheet"
+        href="style.css"
+    >
+
+    <style>
+
+        /* =====================================================
+           VISUALIZE PAGE
+        ===================================================== */
+
+        .visualize-page {
+
+            max-width: 1240px;
+
+            margin: auto;
+
+            padding: 70px 40px 120px;
+
+        }
+
+
+        /* =====================================================
+           PAGE INTRO
+        ===================================================== */
+
+        .visualize-intro {
+
+            margin-bottom: 35px;
+
+        }
+
+        .visualize-intro h1 {
+
+            font-size: clamp(48px, 6vw, 76px);
+
+            line-height: .98;
+
+            letter-spacing: -4px;
+
+            font-weight: 500;
+
+            margin-bottom: 20px;
+
+        }
+
+        .visualize-intro h1 em {
+
+            font-family:
+                "Playfair Display",
+                Georgia,
+                serif;
+
+            font-weight: 500;
+
+        }
+
+        .visualize-intro p:not(.eyebrow) {
+
+            max-width: 620px;
+
+            color: #6d6a63;
+
+            font-size: 16px;
+
+            line-height: 1.7;
+
+        }
+
+
+        /* =====================================================
+           CATEGORY NAV
+        ===================================================== */
+
+        .visual-categories {
+
+            display: flex;
+
+            gap: 8px;
+
+            flex-wrap: wrap;
+
+            margin-bottom: 25px;
+
+        }
+
+        .visual-category {
+
+            border: 1px solid #d2d0c8;
+
+            background: transparent;
+
+            border-radius: 30px;
+
+            padding: 10px 17px;
+
+            font-size: 12px;
+
+            cursor: pointer;
+
+            color: #555;
+
+            transition: .2s;
+
+        }
+
+        .visual-category:hover {
+
+            border-color: #111;
+
+        }
+
+        .visual-category.active {
+
+            background: #171717;
+
+            color: white;
+
+            border-color: #171717;
+
+        }
+
+
+        /* =====================================================
+           VISUALIZER LAYOUT
+        ===================================================== */
+
+        .visualizer-layout {
+
+            display: grid;
+
+            grid-template-columns:
+                215px 1fr;
+
+            gap: 15px;
+
+            min-height: 620px;
+
+        }
+
+
+        /* =====================================================
+           TOPIC SIDEBAR
+        ===================================================== */
+
+        .visual-topic-panel {
+
+            background: #eeece4;
+
+            border-radius: 22px;
+
+            padding: 12px;
+
+            height: fit-content;
+
+        }
+
+        .visual-topic-title {
+
+            padding: 10px;
+
+            font-size: 10px;
+
+            text-transform: uppercase;
+
+            letter-spacing: 1.4px;
+
+            color: #77736d;
+
+        }
+
+        .visual-topic {
+
+            width: 100%;
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 10px;
+
+            border: none;
+
+            background: transparent;
+
+            color: #666;
+
+            text-align: left;
+
+            padding: 12px;
+
+            border-radius: 10px;
+
+            cursor: pointer;
+
+            font-size: 12px;
+
+            transition: .2s;
+
+        }
+
+        .visual-topic:hover {
+
+            background: #dedbd2;
+
+            color: #111;
+
+        }
+
+        .visual-topic.active {
+
+            background: #171717;
+
+            color: white;
+
+        }
+
+        .visual-topic-icon {
+
+            width: 25px;
+
+            height: 25px;
+
+            border-radius: 50%;
+
+            display: grid;
+
+            place-items: center;
+
+            background: rgba(255,255,255,.7);
+
+            color: #111;
+
+            font-size: 11px;
+
+        }
+
+        .visual-topic.active
+        .visual-topic-icon {
+
+            background: white;
+
+        }
+
+
+        /* =====================================================
+           VISUALIZER
+        ===================================================== */
+
+        .visualizer {
+
+            background: #111;
+
+            border-radius: 25px;
+
+            min-height: 620px;
+
+            overflow: hidden;
+
+            position: relative;
+
+            color: white;
+
+        }
+
+
+        /* TOP BAR */
+
+        .visualizer-top {
+
+            position: absolute;
+
+            top: 0;
+
+            left: 0;
+
+            right: 0;
+
+            z-index: 10;
+
+            padding: 22px 24px;
+
+            display: flex;
+
+            align-items: flex-start;
+
+            justify-content: space-between;
+
+        }
+
+        .visualizer-title h2 {
+
+            font-size: 22px;
+
+            font-weight: 500;
+
+            margin-bottom: 3px;
+
+        }
+
+        .visualizer-title span {
+
+            font-size: 10px;
+
+            color: #999;
+
+        }
+
+        .fullscreen-button {
+
+            width: 35px;
+
+            height: 35px;
+
+            border-radius: 9px;
+
+            border: 1px solid #444;
+
+            background: rgba(255,255,255,.06);
+
+            color: white;
+
+            cursor: pointer;
+
+        }
+
+
+        /* =====================================================
+           PLANT VISUAL
+        ===================================================== */
+
+        .visual-stage {
+
+            position: absolute;
+
+            inset: 0;
+
+            display: grid;
+
+            place-items: center;
+
+            overflow: hidden;
+
+            background:
+                radial-gradient(
+                    circle at center,
+                    #293333 0%,
+                    #111 55%,
+                    #090909 100%
+                );
+
+        }
+
+        .stage-grid {
+
+            position: absolute;
+
+            width: 800px;
+
+            height: 800px;
+
+            background-image:
+                linear-gradient(
+                    rgba(255,255,255,.035) 1px,
+                    transparent 1px
+                ),
+                linear-gradient(
+                    90deg,
+                    rgba(255,255,255,.035) 1px,
+                    transparent 1px
+                );
+
+            background-size: 40px 40px;
+
+            transform:
+                perspective(500px)
+                rotateX(65deg)
+                translateY(100px);
+
+            opacity: .7;
+
+        }
+
+
+        /* PLANT */
+
+        .plant-model {
+
+            position: relative;
+
+            width: 350px;
+
+            height: 390px;
+
+            transition:
+                transform .5s ease;
+
+            z-index: 3;
+
+        }
+
+        .plant-root {
+
+            position: absolute;
+
+            width: 110px;
+
+            height: 145px;
+
+            bottom: 42px;
+
+            left: 120px;
+
+            border-left: 3px solid #d6c7a2;
+
+            border-right: 3px solid #d6c7a2;
+
+            border-radius:
+                0 0 50% 50%;
+
+        }
+
+        .root-line {
+
+            position: absolute;
+
+            height: 3px;
+
+            background: #d6c7a2;
+
+            width: 80px;
+
+            transform-origin: left;
+
+        }
+
+        .root-one {
+
+            left: 120px;
+
+            bottom: 100px;
+
+            transform: rotate(35deg);
+
+        }
+
+        .root-two {
+
+            left: 215px;
+
+            bottom: 90px;
+
+            transform: rotate(145deg);
+
+        }
+
+        .root-three {
+
+            left: 130px;
+
+            bottom: 65px;
+
+            transform: rotate(-25deg);
+
+        }
+
+
+        .plant-stem-main {
+
+            position: absolute;
+
+            width: 10px;
+
+            height: 230px;
+
+            left: 170px;
+
+            bottom: 125px;
+
+            background:
+                linear-gradient(
+                    to right,
+                    #526e4c,
+                    #93b477,
+                    #3d5d3a
+                );
+
+            border-radius: 10px;
+
+        }
+
+
+        .plant-leaf {
+
+            position: absolute;
+
+            width: 130px;
+
+            height: 60px;
+
+            border-radius:
+                100% 0 100% 0;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #9fca7c,
+                    #365c39
+                );
+
+            border: 1px solid #a5d68d;
+
+        }
+
+        .leaf-left {
+
+            left: 60px;
+
+            top: 120px;
+
+            transform:
+                rotate(-22deg);
+
+        }
+
+        .leaf-right {
+
+            left: 170px;
+
+            top: 90px;
+
+            transform:
+                rotate(25deg)
+                scaleX(-1);
+
+        }
+
+        .leaf-left-bottom {
+
+            left: 48px;
+
+            top: 195px;
+
+            transform:
+                rotate(-32deg);
+
+            width: 110px;
+
+        }
+
+        .leaf-right-bottom {
+
+            left: 175px;
+
+            top: 180px;
+
+            transform:
+                rotate(35deg)
+                scaleX(-1);
+
+            width: 115px;
+
+        }
+
+
+        /* =====================================================
+           LABELS
+        ===================================================== */
+
+        .science-label {
+
+            position: absolute;
+
+            z-index: 5;
+
+            padding: 7px 11px;
+
+            border: 1px solid rgba(255,255,255,.2);
+
+            background: rgba(0,0,0,.55);
+
+            border-radius: 8px;
+
+            font-size: 10px;
+
+            color: #ddd;
+
+            backdrop-filter: blur(8px);
+
+        }
+
+        .label-sun {
+
+            top: 25%;
+
+            left: 16%;
+
+        }
+
+        .label-co2 {
+
+            left: 13%;
+
+            top: 52%;
+
+        }
+
+        .label-o2 {
+
+            right: 14%;
+
+            top: 42%;
+
+        }
+
+        .label-water {
+
+            left: 18%;
+
+            bottom: 28%;
+
+        }
+
+        .label-glucose {
+
+            right: 10%;
+
+            bottom: 25%;
+
+        }
+
+
+        /* =====================================================
+           LIGHT PARTICLES
+        ===================================================== */
+
+        .light-particle {
+
+            position: absolute;
+
+            width: 5px;
+
+            height: 5px;
+
+            border-radius: 50%;
+
+            background: #eee2a8;
+
+            box-shadow:
+                0 0 15px #eee2a8;
+
+            animation:
+                floatParticle 4s infinite ease-in-out;
+
+        }
+
+        .particle-one {
+
+            left: 20%;
+
+            top: 25%;
+
+        }
+
+        .particle-two {
+
+            left: 32%;
+
+            top: 18%;
+
+            animation-delay: 1s;
+
+        }
+
+        .particle-three {
+
+            right: 25%;
+
+            top: 30%;
+
+            animation-delay: 1.8s;
+
+        }
+
+        @keyframes floatParticle {
+
+            0%,
+            100% {
+
+                transform:
+                    translateY(0);
+
+                opacity: .4;
+
+            }
+
+            50% {
+
+                transform:
+                    translateY(-25px);
+
+                opacity: 1;
+
+            }
+
+        }
+
+
+        /* =====================================================
+           RIGHT CONTROL PANEL
+        ===================================================== */
+
+        .visual-controls {
+
+            position: absolute;
+
+            right: 20px;
+
+            top: 50%;
+
+            transform:
+                translateY(-50%);
+
+            z-index: 20;
+
+            display: flex;
+
+            flex-direction: column;
+
+            gap: 7px;
+
+        }
+
+        .visual-control {
+
+            width: 42px;
+
+            height: 42px;
+
+            border: 1px solid #454545;
+
+            border-radius: 11px;
+
+            background:
+                rgba(20,20,20,.85);
+
+            color: white;
+
+            cursor: pointer;
+
+            font-size: 15px;
+
+            transition: .2s;
+
+        }
+
+        .visual-control:hover {
+
+            background: white;
+
+            color: black;
+
+        }
+
+        .visual-control.active {
+
+            background: white;
+
+            color: black;
+
+        }
+
+
+        /* =====================================================
+           BOTTOM TOOLBAR
+        ===================================================== */
+
+        .visual-toolbar {
+
+            position: absolute;
+
+            left: 20px;
+
+            right: 20px;
+
+            bottom: 20px;
+
+            z-index: 20;
+
+            display: flex;
+
+            justify-content: center;
+
+            gap: 7px;
+
+        }
+
+        .view-button {
+
+            border: 1px solid #444;
+
+            background:
+                rgba(15,15,15,.88);
+
+            color: #ccc;
+
+            border-radius: 10px;
+
+            padding: 10px 16px;
+
+            font-size: 11px;
+
+            cursor: pointer;
+
+            transition: .2s;
+
+        }
+
+        .view-button:hover {
+
+            color: white;
+
+            border-color: #888;
+
+        }
+
+        .view-button.active {
+
+            background: white;
+
+            color: black;
+
+            border-color: white;
+
+        }
+
+
+        /* =====================================================
+           INFO BAR
+        ===================================================== */
+
+        .visual-info {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(3, 1fr);
+
+            gap: 10px;
+
+            margin-top: 15px;
+
+        }
+
+        .info-box {
+
+            background: #eeece4;
+
+            border-radius: 16px;
+
+            padding: 20px;
+
+        }
+
+        .info-box span {
+
+            display: block;
+
+            color: #77736d;
+
+            font-size: 10px;
+
+            text-transform: uppercase;
+
+            letter-spacing: 1px;
+
+            margin-bottom: 7px;
+
+        }
+
+        .info-box strong {
+
+            font-size: 14px;
+
+        }
+
+
+        /* =====================================================
+           MOBILE
+        ===================================================== */
+
+        @media (max-width: 850px) {
+
+            .visualize-page {
+
+                padding:
+                    60px 20px 90px;
+
+            }
+
+            .visualizer-layout {
+
+                grid-template-columns: 1fr;
+
+            }
+
+            .visual-topic-panel {
+
+                display: flex;
+
+                overflow-x: auto;
+
+                gap: 5px;
+
+                padding: 8px;
+
+            }
+
+            .visual-topic-title {
+
+                display: none;
+
+            }
+
+            .visual-topic {
+
+                width: auto;
+
+                min-width: max-content;
+
+            }
+
+            .visualizer {
+
+                min-height: 560px;
+
+            }
+
+            .visual-info {
+
+                grid-template-columns: 1fr;
+
+            }
+
+        }
+
+
+        @media (max-width: 500px) {
+
+            .visualize-intro h1 {
+
+                font-size: 51px;
+
+                letter-spacing: -3px;
+
+            }
+
+            .visualizer {
+
+                min-height: 510px;
+
+            }
+
+            .plant-model {
+
+                transform:
+                    scale(.75);
+
+            }
+
+            .science-label {
+
+                font-size: 8px;
+
+                padding: 5px 7px;
+
+            }
+
+            .visual-controls {
+
+                right: 10px;
+
+            }
+
+            .visual-toolbar {
+
+                left: 10px;
+
+                right: 10px;
+
+                overflow-x: auto;
+
+                justify-content: flex-start;
+
+            }
+
+            .view-button {
+
+                white-space: nowrap;
+
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- =====================================================
+     HEADER
+===================================================== -->
+
+<header class="site-header">
+
+    <a
+        href="index.html"
+        class="brand"
+    >
+        JNAIVA
+    </a>
+
+
+    <nav class="main-nav">
+
+        <a
+            href="index.html"
+            class="nav-link"
+        >
+            Home
+        </a>
+
+        <a
+            href="learn.html"
+            class="nav-link"
+        >
+            Learn
+        </a>
+
+        <a
+            href="visualize.html"
+            class="nav-link active"
+        >
+            Visualize
+        </a>
+
+        <a
+            href="quiz.html"
+            class="nav-link"
+        >
+            Quiz
+        </a>
+
+        <a
+            href="voice.html"
+            class="nav-link"
+        >
+            Voice
+        </a>
+
+        <a
+            href="dashboard.html"
+            class="nav-link"
+        >
+            About
+        </a>
+
+    </nav>
+
+
+    <div class="header-actions">
+
+        <a
+            href="learn.html"
+            class="header-button"
+        >
+            Start Learning
+            <span>→</span>
+        </a>
+
+        <button
+            class="menu-button"
+            id="menuButton"
+        >
+            ☰
+        </button>
+
+    </div>
+
+</header>
+
+
+<!-- MOBILE MENU -->
+
+<div
+    class="mobile-menu"
+    id="mobileMenu"
+>
+
+    <a href="index.html">
+        Home
+    </a>
+
+    <a href="learn.html">
+        Learn
+    </a>
+
+    <a href="visualize.html">
+        Visualize
+    </a>
+
+    <a href="quiz.html">
+        Quiz
+    </a>
+
+    <a href="voice.html">
+        Voice
+    </a>
+
+    <a href="dashboard.html">
+        About
+    </a>
+
+</div>
+
+
+
+<!-- =====================================================
+     VISUALIZE PAGE
+===================================================== -->
+
+<main class="visualize-page">
+
+
+    <!-- INTRO -->
+
+    <section class="visualize-intro">
+
+        <p class="eyebrow">
+            JNAIVA VISUAL LEARNING
+        </p>
+
+        <h1>
+
+            See ideas
+            <br>
+
+            <em>come to life.</em>
+
+        </h1>
+
+        <p>
+
+            Explore difficult concepts through
+            interactive models, animations and
+            visual explanations.
+
+        </p>
+
+    </section>
+
+
+
+    <!-- CATEGORIES -->
+
+    <div class="visual-categories">
+
+        <button
+            class="visual-category active"
+        >
+            Biology
+        </button>
+
+        <button class="visual-category">
+            Physics
+        </button>
+
+        <button class="visual-category">
+            Chemistry
+        </button>
+
+        <button class="visual-category">
+            Space
+        </button>
+
+        <button class="visual-category">
+            Human Body
+        </button>
+
+        <button class="visual-category">
+            Technology
+        </button>
+
+    </div>
+
+
+
+    <!-- VISUALIZER -->
+
+    <section class="visualizer-layout">
+
+
+        <!-- TOPICS -->
+
+        <aside class="visual-topic-panel">
+
+            <div class="visual-topic-title">
+                Explore
+            </div>
+
+
+            <button
+                class="visual-topic active"
+            >
+
+                <span class="visual-topic-icon">
+                    ✦
+                </span>
+
+                Photosynthesis
+
+            </button>
+
+
+            <button class="visual-topic">
+
+                <span class="visual-topic-icon">
+                    ♥
+                </span>
+
+                Human Heart
+
+            </button>
+
+
+            <button class="visual-topic">
+
+                <span class="visual-topic-icon">
+                    ◉
+                </span>
+
+                DNA Structure
+
+            </button>
+
+
+            <button class="visual-topic">
+
+                <span class="visual-topic-icon">
+                    ◇
+                </span>
+
+                Cell Structure
+
+            </button>
+
+
+            <button class="visual-topic">
+
+                <span class="visual-topic-icon">
+                    ≋
+                </span>
+
+                Digestive System
+
+            </button>
+
+
+            <button class="visual-topic">
+
+                <span class="visual-topic-icon">
+                    ◎
+                </span>
+
+                Respiratory System
+
+            </button
