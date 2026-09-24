@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Login - JNAIVA</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <main class="auth-page">
+
+        <div class="auth-card">
+
+            <h1>Welcome Back</h1>
+
+            <p>Login to continue learning with JNAIVA.</p>
+
+            <form id="loginForm">
+
+                <label for="email">Email</label>
+
+                <input
+                    type="email"
+                    id="email"
+                    placeholder="Enter your email"
+                    required
+                >
+
+                <label for="password">Password</label>
+
+                <input
+                    type="password"
+                    id="password"
+                    placeholder="Enter your password"
+                    required
+                >
+
+                <button type="submit">
+                    Login
+                </button>
+
+                <p id="loginMessage"></p>
+
+            </form>
+
+            <p>
+                Don't have an account?
+                <a href="signup.html">Create Account</a>
+            </p>
+
+        </div>
+
+    </main>
+
+    <script src="auth.js"></script>
+
+    <script>
+        const loginForm = document.getElementById("loginForm");
+        const loginMessage = document.getElementById("loginMessage");
+
+        loginForm.addEventListener("submit", async function (event) {
+
+            event.preventDefault();
+
+            const email = document.getElementById("email").value.trim();
+            const password = document.getElementById("password").value;
+
+            loginMessage.textContent = "Logging in...";
+
+            try {
+
+                const user = await loginUser(email, password);
+
+                loginMessage.textContent =
+                    `Welcome ${user.name}! Redirecting...`;
+
+                setTimeout(() => {
+                    window.location.href = "dashboard.html";
+                }, 800);
+
+            } catch (error) {
+
+                loginMessage.textContent = error.message;
+
+            }
+
+        });
+    </script>
+
+</body>
+
+</html>

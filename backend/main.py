@@ -6,6 +6,10 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from google import genai
 
+from database import Base, engine
+import models
+from auth_routes import router as auth_router
+
 
 # =========================================================
 # ENVIRONMENT
@@ -31,6 +35,10 @@ app = FastAPI(
     version="1.0.0"
 )
 
+Base.metadata.create_all(bind=engine)
+
+app.include_router(auth_router)
+
 
 # =========================================================
 # CORS
@@ -38,7 +46,10 @@ app = FastAPI(
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=[
+        "http://localhost:5500",
+        "http://127.0.0.1:5500"
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -326,7 +337,6 @@ progress = {
     "streak": 0,
     "xp": 0
 }
-
 
 class ProgressRequest(BaseModel):
     topic_id: str

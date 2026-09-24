@@ -563,7 +563,7 @@
 
                 <h1>
                     Welcome back,
-                    <em>learner.</em>
+                    <em id="userName">learner.</em>
                 </h1>
 
             </div>
@@ -911,5 +911,43 @@
     <footer class="site-footer">
 
         <p>
-            Made with ❤️ by
-            <a href="
+            <footer class="site-footer">
+
+    <p>
+        Made with ❤️ by 
+        <a href="...">
+            ...
+        </a>
+    </p>
+
+</footer>
+
+
+<script src="auth.js"></script>
+
+<script>
+    async function protectDashboard() {
+        try {
+            let user = await getCurrentUser();
+
+            if (!user) {
+                user = await refreshSession();
+            }
+
+            if (!user) {
+                window.location.href = "auth-choice.html";
+                return;
+            }
+
+            document.getElementById("userName").textContent = user.name;
+        } catch (error) {
+            console.error("Authentication check failed:", error);
+            window.location.href = "auth-choice.html";
+        }
+    }
+
+    protectDashboard();
+</script>
+
+</body>
+</html>

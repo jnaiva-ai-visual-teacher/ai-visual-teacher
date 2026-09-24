@@ -100,11 +100,12 @@
 
 
         <a
-            href="learn.html"
+             href="auth-choice.html"
             class="header-button"
-        >
+>      
             Get Started
             <span>→</span>
+
         </a>
 
 
@@ -197,7 +198,7 @@
         <div class="hero-buttons">
 
             <a
-                href="learn.html"
+                href="auth-choice.html"
                 class="primary-button"
             >
                 Start Learning
@@ -916,7 +917,7 @@
 
 
     <a
-        href="learn.html"
+        href="auth-choice.html"
         class="primary-button"
     >
 
@@ -1012,7 +1013,7 @@
         </p>
 
         <a
-            href="learn.html"
+            href="auth-choice.html"
             class="primary-button"
         >
             Start Learning →
@@ -1025,6 +1026,28 @@
 
 
 <script src="script.js"></script>
+
+<script src="auth.js"></script>
+<script>
+    async function checkExistingSession() {
+        try {
+            let user = await getCurrentUser();
+
+            if (!user) {
+                user = await refreshSession();
+            }
+
+            if (user) {
+                window.location.href = "dashboard.html";
+            }
+        } catch (error) {
+            console.log("No active session.");
+        }
+    }
+
+    checkExistingSession();
+</script>
+
 
 </body>
 
