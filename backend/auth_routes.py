@@ -111,14 +111,6 @@ def login(
 
     return user
 
-@router.post("/refresh", response_model=UserResponse)
-def refresh_session(
-    response: Response,
-    db: Session = Depends(get_db)
-):
-    session_token = None
-
-    # We need the request to read the session cookie.
 
 @router.post("/refresh", response_model=UserResponse)
 def refresh_session(
